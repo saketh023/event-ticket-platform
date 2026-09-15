@@ -1,0 +1,8 @@
+package com.sakeva.tickets.domain;
+
+// Represents the different ways a ticket can be validated
+
+public enum TicketValidationMethodEnum {
+    QR_SCAN,
+    MANUAL
+}
