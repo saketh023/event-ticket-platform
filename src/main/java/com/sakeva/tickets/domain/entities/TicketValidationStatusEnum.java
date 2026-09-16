@@ -1,4 +1,4 @@
-package com.sakeva.tickets.domain;
+package com.sakeva.tickets.domain.entities;
 
 // Represents the state a TicketValidation could be in
 

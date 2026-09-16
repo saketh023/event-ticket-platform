@@ -1,6 +1,6 @@
 package com.sakeva.tickets.filters;
 
-import com.sakeva.tickets.domain.User;
+import com.sakeva.tickets.domain.entities.User;
 import com.sakeva.tickets.repositories.UserRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

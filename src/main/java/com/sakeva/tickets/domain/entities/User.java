@@ -1,4 +1,4 @@
-package com.sakeva.tickets.domain;
+package com.sakeva.tickets.domain.entities;
 
 import jakarta.persistence.*;
 import lombok.*;

@@ -1,4 +1,4 @@
-package com.sakeva.tickets.domain;
+package com.sakeva.tickets.domain.entities;
 
 // Different states in which the QR code could be in
 
