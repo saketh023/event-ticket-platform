@@ -2,11 +2,9 @@ package com.sakeva.tickets.mappers;
 
 import com.sakeva.tickets.domain.CreateEventRequest;
 import com.sakeva.tickets.domain.CreateTicketTypeRequest;
-import com.sakeva.tickets.domain.dtos.CreateEventRequestDto;
-import com.sakeva.tickets.domain.dtos.CreateEventResponseDto;
-import com.sakeva.tickets.domain.dtos.CreateTicketTypeRequestDto;
-import com.sakeva.tickets.domain.dtos.CreateTicketTypeResponseDto;
+import com.sakeva.tickets.domain.dtos.*;
 import com.sakeva.tickets.domain.entities.Event;
+import com.sakeva.tickets.domain.entities.TicketType;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
 
@@ -18,4 +16,8 @@ public interface EventMapper {
     CreateEventRequest fromDto(CreateEventRequestDto dto);
 
     CreateEventResponseDto toDto(Event event);
+
+    ListEventTicketTypeResponseDto toDto(TicketType ticketType);
+
+    ListEventResponseDto toListEventResponseDto(Event event);
 }
