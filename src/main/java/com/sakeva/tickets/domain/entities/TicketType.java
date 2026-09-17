@@ -41,7 +41,7 @@ public class TicketType {
     @JoinColumn(name = "event_id")
     private Event event;
 
-    @OneToMany(mappedBy = "ticketType", cas)
+    @OneToMany(mappedBy = "ticketType", cascade = CascadeType.ALL)
     private List<Ticket> tickets = new ArrayList<>();
 
     @CreatedDate

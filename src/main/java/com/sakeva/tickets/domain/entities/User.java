@@ -34,7 +34,7 @@ public class User {
     @OneToMany(mappedBy = "organizer", cascade = CascadeType.ALL) // if one entry is deleted, all related entries with this field will also be deleted?
     private List<Event> organizedEvents = new ArrayList<>();
 
-    @ManyToOne
+    @ManyToMany
     @JoinTable(
             name = "user_attending_events",
             joinColumns = @JoinColumn(name = "user_id"),
