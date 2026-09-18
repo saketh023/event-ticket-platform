@@ -3,6 +3,7 @@ package com.sakeva.tickets.controllers;
 import com.sakeva.tickets.domain.CreateEventRequest;
 import com.sakeva.tickets.domain.dtos.CreateEventRequestDto;
 import com.sakeva.tickets.domain.dtos.CreateEventResponseDto;
+import com.sakeva.tickets.domain.dtos.GetEventDetailsResponseDto;
 import com.sakeva.tickets.domain.dtos.ListEventResponseDto;
 import com.sakeva.tickets.domain.entities.Event;
 import com.sakeva.tickets.mappers.EventMapper;
@@ -42,6 +43,17 @@ public class EventController {
         UUID userId = parseUserId(jwt);
         Page<Event> events = eventService.listEventsForOrganizer(userId, pageable);
         return ResponseEntity.ok(events.map(eventMapper::toListEventResponseDto));
+    }
+
+    @GetMapping(path = "/{eventId}")
+    public ResponseEntity<GetEventDetailsResponseDto> getEvent(
+            @AuthenticationPrincipal Jwt jwt, @PathVariable UUID eventId) {
+        UUID userId = parseUserId(jwt);
+        return eventService
+                .getEventForOrganizer(userId, eventId)
+                .map(eventMapper::toGetEventDetailsResponseDto)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
     private UUID parseUserId(Jwt jwt) {
