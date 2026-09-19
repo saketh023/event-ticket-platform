@@ -1,6 +1,7 @@
 package com.sakeva.tickets.controllers;
 
 import com.sakeva.tickets.domain.dtos.ListPublishedEventResponseDto;
+import com.sakeva.tickets.domain.entities.Event;
 import com.sakeva.tickets.mappers.EventMapper;
 import com.sakeva.tickets.repositories.EventRepository;
 import com.sakeva.tickets.services.EventService;
@@ -10,6 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -21,8 +23,17 @@ public class PublishedEventController {
     private final EventMapper eventMapper;
 
     @GetMapping
-    public ResponseEntity<Page<ListPublishedEventResponseDto>> listPublishedEvents(Pageable pageable) {
+    public ResponseEntity<Page<ListPublishedEventResponseDto>> listPublishedEvents(
+            @RequestParam(required = false) String q, Pageable pageable) {
+
+        Page<Event> events;
+        if(null != q && !q.trim().isEmpty()) {
+            events = eventService.searchPublishedEvents(q, pageable);
+        }
+        else{
+            events = eventService.listPublishedEvents(pageable);
+        }
         return ResponseEntity.ok(
-                eventService.listPublishedEvents(pageable).map(eventMapper::toListPublishedEventResponseDto));
+                events.map(eventMapper::toListPublishedEventResponseDto));
     }
 }
