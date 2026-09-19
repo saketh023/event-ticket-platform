@@ -3,10 +3,7 @@ package com.sakeva.tickets.services.impl;
 import com.sakeva.tickets.domain.CreateEventRequest;
 import com.sakeva.tickets.domain.UpdateEventRequest;
 import com.sakeva.tickets.domain.UpdateTicketTypeRequest;
-import com.sakeva.tickets.domain.entities.Event;
-import com.sakeva.tickets.domain.entities.Ticket;
-import com.sakeva.tickets.domain.entities.TicketType;
-import com.sakeva.tickets.domain.entities.User;
+import com.sakeva.tickets.domain.entities.*;
 import com.sakeva.tickets.exceptions.EventNotFoundException;
 import com.sakeva.tickets.exceptions.EventUpdateException;
 import com.sakeva.tickets.exceptions.TicketTypeNotFoundException;
@@ -99,22 +96,20 @@ public class EventServiceImpl implements EventService {
         existingEvent.setSalesEnd(event.getSalesEnd());
         existingEvent.setStatus(event.getStatus());
 
-        Set<UUID> requestTicketTypeIds = event.getTicketTypes()
-                .stream()
+        Set<UUID> requestTicketTypeIds = event.getTicketTypes().stream()
                 .map(UpdateTicketTypeRequest::getId)
                 .filter(Objects::nonNull)
                 .collect(Collectors.toSet());
 
-        existingEvent.getTicketTypes().removeIf(
-                existingTicketType -> !requestTicketTypeIds.contains(existingTicketType.getId())
-        );
+        existingEvent
+                .getTicketTypes()
+                .removeIf(existingTicketType -> !requestTicketTypeIds.contains(existingTicketType.getId()));
 
-        Map<UUID, TicketType> existingTicketTypesIndex = existingEvent.getTicketTypes().stream().collect(
-                Collectors.toMap(TicketType::getId, Function.identity())
-        );
+        Map<UUID, TicketType> existingTicketTypesIndex = existingEvent.getTicketTypes().stream()
+                .collect(Collectors.toMap(TicketType::getId, Function.identity()));
 
-        for(UpdateTicketTypeRequest ticketType : event.getTicketTypes()) {
-            if(null == ticketType.getId()) {
+        for (UpdateTicketTypeRequest ticketType : event.getTicketTypes()) {
+            if (null == ticketType.getId()) {
                 TicketType ticketTypeToCreate = new TicketType();
                 ticketTypeToCreate.setName(ticketType.getName());
                 ticketTypeToCreate.setPrice(ticketType.getPrice());
@@ -122,18 +117,28 @@ public class EventServiceImpl implements EventService {
                 ticketTypeToCreate.setTotalAvailable(ticketType.getTotalAvailable());
                 ticketTypeToCreate.setEvent(existingEvent);
                 existingEvent.getTicketTypes().add(ticketTypeToCreate);
-            }else if(existingTicketTypesIndex.containsKey(ticketType.getId())) {
+            } else if (existingTicketTypesIndex.containsKey(ticketType.getId())) {
                 TicketType existingTicketType = existingTicketTypesIndex.get(ticketType.getId());
                 existingTicketType.setName(ticketType.getName());
                 existingTicketType.setPrice(ticketType.getPrice());
                 existingTicketType.setDescription(ticketType.getDescription());
                 existingTicketType.setTotalAvailable(ticketType.getTotalAvailable());
-            }else{
-                throw new TicketTypeNotFoundException(String.format(
-                        "Ticket Type with ID '%s' does not exist", ticketType.getId()
-                ));
+            } else {
+                throw new TicketTypeNotFoundException(
+                        String.format("Ticket Type with ID '%s' does not exist", ticketType.getId()));
             }
         }
         return eventRepository.save(existingEvent);
+    }
+
+    @Override
+    @Transactional
+    public void deleteEventForOrganizer(UUID organizerId, UUID id) {
+        getEventForOrganizer(organizerId, id).ifPresent(eventRepository::delete);
+    }
+
+    @Override
+    public Page<Event> listPublishedEvents(Pageable pageable) {
+        return eventRepository.findByStatus(EventStatusEnum.PUBLISHED, pageable);
     }
 }
