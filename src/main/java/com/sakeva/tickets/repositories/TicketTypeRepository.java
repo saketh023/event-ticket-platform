@@ -16,4 +16,4 @@ public interface TicketTypeRepository extends JpaRepository<TicketType, UUID> {
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     Optional<TicketType> findByIdWithLock(@Param("id") UUID id);
 
-}3
+}
