@@ -6,6 +6,7 @@ import com.sakeva.tickets.domain.entities.Event;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import javax.swing.text.html.Option;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -17,4 +18,5 @@ public interface EventService {
     void deleteEventForOrganizer(UUID organizerId, UUID id);
     Page<Event> listPublishedEvents(Pageable pageable);
     Page<Event> searchPublishedEvents(String query, Pageable pageable);
+    Optional<Event> getPublishedEvent(UUID id);
 }
