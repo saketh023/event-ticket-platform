@@ -1,8 +1,7 @@
 package com.sakeva.tickets.exceptions;
 
-public class EventTicketException extends RuntimeException{
-    public EventTicketException() {
-    }
+public class EventTicketException extends RuntimeException {
+    public EventTicketException() {}
 
     public EventTicketException(String message) {
         super(message);
@@ -16,7 +15,8 @@ public class EventTicketException extends RuntimeException{
         super(cause);
     }
 
-    public EventTicketException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+    public EventTicketException(
+            String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
     }
 }

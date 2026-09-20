@@ -1,8 +1,7 @@
 package com.sakeva.tickets.exceptions;
 
-public class EventUpdateException extends EventTicketException{
-    public EventUpdateException() {
-    }
+public class EventUpdateException extends EventTicketException {
+    public EventUpdateException() {}
 
     public EventUpdateException(String message) {
         super(message);
@@ -16,7 +15,8 @@ public class EventUpdateException extends EventTicketException{
         super(cause);
     }
 
-    public EventUpdateException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+    public EventUpdateException(
+            String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
     }
 }

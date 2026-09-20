@@ -1,8 +1,7 @@
 package com.sakeva.tickets.exceptions;
 
-public class EventNotFoundException extends EventTicketException{
-    public EventNotFoundException() {
-    }
+public class EventNotFoundException extends EventTicketException {
+    public EventNotFoundException() {}
 
     public EventNotFoundException(String message) {
         super(message);
@@ -16,7 +15,8 @@ public class EventNotFoundException extends EventTicketException{
         super(cause);
     }
 
-    public EventNotFoundException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+    public EventNotFoundException(
+            String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
     }
 }
