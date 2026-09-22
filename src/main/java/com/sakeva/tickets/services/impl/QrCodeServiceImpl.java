@@ -9,9 +9,11 @@ import com.sakeva.tickets.domain.entities.QrCode;
 import com.sakeva.tickets.domain.entities.QrCodeStatusEnum;
 import com.sakeva.tickets.domain.entities.Ticket;
 import com.sakeva.tickets.exceptions.QrCodeGenerationException;
+import com.sakeva.tickets.exceptions.QrCodeNotFoundException;
 import com.sakeva.tickets.repositories.QrCodeRepository;
 import com.sakeva.tickets.services.QrCodeService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.imageio.ImageIO;
@@ -21,6 +23,7 @@ import java.io.IOException;
 import java.util.Base64;
 import java.util.UUID;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class QrCodeServiceImpl implements QrCodeService {
@@ -49,6 +52,20 @@ public class QrCodeServiceImpl implements QrCodeService {
             throw new QrCodeGenerationException("Failed to generate QR Code", ex);
         }
     }
+
+    @Override
+    public byte[] getQrCodeImageForUserAndTicket(UUID userId, UUID ticketId) {
+        QrCode qrCode = qrCodeRepository.findByTicketIdAndTicketPurchaserId(ticketId, userId)
+                .orElseThrow(QrCodeNotFoundException::new);
+
+        try{
+            return Base64.getDecoder().decode(qrCode.getValue());
+        }catch (IllegalArgumentException ex){
+            log.error("Invalid Base64 QR Code for Ticket ID: {}", ticketId, ex);
+            throw new QrCodeNotFoundException();
+        }
+    }
+
 
     private String generateQrCodeImage(UUID uniqueId) throws WriterException, IOException {
         BitMatrix bitMatrix = qrCodeWriter.encode(uniqueId.toString(), BarcodeFormat.QR_CODE, QR_WIDTH, QR_HEIGHT);
