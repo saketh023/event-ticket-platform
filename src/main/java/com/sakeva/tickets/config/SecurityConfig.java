@@ -24,6 +24,8 @@ public class SecurityConfig {
                         .permitAll()
                         .requestMatchers("/api/v1/events")
                         .hasRole("ORGANIZER")
+                        .requestMatchers("/api/v1/ticket-validations")
+                        .hasRole("STAFF")
                         .anyRequest()
                         .authenticated())
                 .csrf(csrf -> csrf.disable())
